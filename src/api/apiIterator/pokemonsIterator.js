@@ -12,95 +12,95 @@ export default /**
  * @extends BaseIterator
  */
 class PokemonsIterator extends BaseIterator {
-	/**
-	 *
-	 * @param {Number} limit
-	 * @param {Number} offset
-	 */
-	constructor(limit, offset) {
-		super();
-		this.__response = {};
-		this.__limit = limit;
-		this.__offset = offset;
-	}
+  /**
+   *
+   * @param {Number} limit
+   * @param {Number} offset
+   */
+  constructor(limit, offset) {
+    super();
+    this.__response = {};
+    this.__limit = limit;
+    this.__offset = offset;
+  }
 
-	/**
-	 *
-	 * @returns {Promise} - API request to get list of pokemons
-	 */
-	async __request() {
-		const res = await api.getPokemonsList({
-			limit: this.__limit,
-			offset: this.__offset,
-		});
+  /**
+   *
+   * @returns {Promise} - API request to get list of pokemons
+   */
+  async __request() {
+    const res = await api.getPokemonsList({
+      limit: this.__limit,
+      offset: this.__offset,
+    });
 
-		return res;
-	}
+    return res;
+  }
 
-	/**
-	 * Initializes iterator
-	 */
-	async init() {
-		this.__response = await this.__request();
-	}
+  /**
+   * Initializes iterator
+   */
+  async init() {
+    this.__response = await this.__request();
+  }
 
-	/**
-	 * Iterate to next
-	 *
-	 * @returns {Array} - results("value" of "iterable")
-	 */
-	async next() {
-		if (!this.hasNext()) {
-			throw new Error("ApiIterator out of range");
-		}
-		this.__offset += this.__limit;
+  /**
+   * Iterate to next
+   *
+   * @returns {Array} - results("value" of "iterable")
+   */
+  async next() {
+    if (!this.hasNext()) {
+      throw new Error("ApiIterator out of range");
+    }
+    this.__offset += this.__limit;
 
-		this.__response = await this.__request();
+    this.__response = await this.__request();
 
-		return this.__response.results;
-	}
+    return this.__response.results;
+  }
 
-	/**
-	 * Iterate to previous
-	 *
-	 * @returns {Array} - results("value" of "iterable")
-	 */
-	async prev() {
-		if (!this.hasPrev()) {
-			throw new Error("ApiIterator out of range");
-		}
-		if (this.__offset < this.__limit) {
-			this.__response = await api.getPokemonsList({
-				limit: this.__offset,
-				offset: 0,
-			});
-		} else {
-			this.__offset -= this.__limit;
+  /**
+   * Iterate to previous
+   *
+   * @returns {Array} - results("value" of "iterable")
+   */
+  async prev() {
+    if (!this.hasPrev()) {
+      throw new Error("ApiIterator out of range");
+    }
+    if (this.__offset < this.__limit) {
+      this.__response = await api.getPokemonsList({
+        limit: this.__offset,
+        offset: 0,
+      });
+    } else {
+      this.__offset -= this.__limit;
 
-			this.__response = await this.__request();
-		}
+      this.__response = await this.__request();
+    }
 
-		return this.__response.results;
-	}
+    return this.__response.results;
+  }
 
-	/**
-	 * @returns {Array} - results("value" of iterable)
-	 */
-	getResults() {
-		return this.__response.results;
-	}
+  /**
+   * @returns {Array} - results("value" of iterable)
+   */
+  getResults() {
+    return this.__response.results;
+  }
 
-	/**
-	 * @returns {bool}
-	 */
-	hasNext() {
-		return !!this.__response.next;
-	}
+  /**
+   * @returns {bool}
+   */
+  hasNext() {
+    return !!this.__response.next;
+  }
 
-	/**
-	 * @returns {bool}
-	 */
-	hasPrev() {
-		return !!this.__response.previous;
-	}
+  /**
+   * @returns {bool}
+   */
+  hasPrev() {
+    return !!this.__response.previous;
+  }
 }
