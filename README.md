@@ -2,9 +2,7 @@
 
 ## Demo
 
-```
-<https://siloss.github.io/test-task/>
-```
+<https://siloss.github.io/test-task>
 
 ## Project setup
 
