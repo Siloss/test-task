@@ -6,7 +6,6 @@ const api = new P.Pokedex();
 export default /**
  * Iterate through the pokemons list.
  * Should be initialized.
- * Count of pokemons per iteration is defined by "limit" param.
  *
  * @class PokemonsIterator
  * @extends BaseIterator
